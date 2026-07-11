@@ -18,6 +18,7 @@ import SpaceEnvironment from "./SpaceEnvironment";
 import SkillCards from "./SkillCards";
 import ProjectOrbit from "./ProjectOrbit";
 import SetDressing from "./SetDressing";
+import Combat from "./Combat";
 import SunImpact from "./SunImpact";
 
 /**
@@ -105,6 +106,7 @@ function DeferredScene() {
   return (
     <Suspense fallback={null}>
       <SetDressing />
+      <Combat />
       <DeferredPrecompile />
     </Suspense>
   );

@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { sampleRocket } from "@/lib/journey";
 import { scrollState } from "@/lib/scroll";
+import { combatState } from "@/lib/combat";
 import { makeGlowTexture } from "@/lib/textures";
 
 /* ------------------------------------------------------------------ */
@@ -522,6 +523,11 @@ export default function Rocket() {
       root.position.y += Math.cos(t * 63) * shudder;
     }
     root.updateMatrixWorld();
+
+    // Publish the ship's live world position so the Combat system can fire
+    // lasers from the nose (a touch above the ship's center, along +Y local).
+    combatState.shipPos.set(0, 0.9, 0).applyQuaternion(root.quaternion).add(root.position);
+    combatState.ready = true;
 
     // ------------------------- exhaust ------------------------------
     const hot = thrust > 0.02;
