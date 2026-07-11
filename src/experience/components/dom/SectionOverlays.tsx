@@ -120,7 +120,7 @@ export default function SectionOverlays() {
   return (
     <div className="pointer-events-none fixed inset-0 z-10">
       {/* ============ 01 // ABOUT ============ */}
-      <div className="absolute inset-y-0 left-0 flex items-center">
+      <div className="absolute inset-0 flex items-end justify-center p-3 lg:inset-y-0 lg:left-0 lg:right-auto lg:items-center lg:justify-start lg:p-0">
         <div
           ref={aboutRef}
           style={{
@@ -131,23 +131,23 @@ export default function SectionOverlays() {
               "0 0 40px rgba(5,8,20,0.7), 0 0 24px rgba(76,201,240,0.1), inset 0 1px 0 rgba(255,255,255,0.08)",
             backdropFilter: "blur(18px)",
           }}
-          className="hud-corners ml-8 w-[470px] max-w-[calc(100vw-4rem)] rounded-2xl border border-hud/25 p-8 lg:ml-16"
+          className="hud-corners w-full max-w-[440px] rounded-2xl border border-hud/25 p-5 lg:ml-16 lg:w-[470px] lg:max-w-[calc(100vw-4rem)] lg:p-8"
         >
           <Kicker>01 // About</Kicker>
-          <h2 className="mt-3 font-display text-[40px] font-bold leading-[1.05] text-star">
+          <h2 className="mt-2 font-display text-[26px] font-bold leading-[1.05] text-star lg:mt-3 lg:text-[40px]">
             Build cool stuff, <span className="text-cyan">ship it fast</span>
           </h2>
-          <p className="mt-5 text-[15px] leading-relaxed text-white/85">
+          <p className="mt-3 text-sm leading-relaxed text-white/85 lg:mt-5 lg:text-[15px]">
             {PROFILE.about.lead}
           </p>
-          <p className="mt-4 text-sm leading-relaxed text-white/75">
+          <p className="mt-3 text-[13px] leading-relaxed text-white/75 lg:mt-4 lg:text-sm">
             {PROFILE.about.p2}
           </p>
-          <p className="mt-4 text-sm leading-relaxed text-white/75">
+          <p className="mt-3 hidden text-[13px] leading-relaxed text-white/75 sm:block lg:mt-4 lg:text-sm">
             {PROFILE.about.p3}
           </p>
-          <div className="hud-line mt-6" />
-          <ul className="mt-5 space-y-2">
+          <div className="hud-line mt-4 lg:mt-6" />
+          <ul className="mt-4 space-y-2 lg:mt-5">
             {PROFILE.about.credentials.map((cred) => (
               <li
                 key={cred}
@@ -161,7 +161,7 @@ export default function SectionOverlays() {
       </div>
 
       {/* ============ 02 // EXPERIENCE ============ */}
-      <div className="absolute inset-y-0 right-0 flex items-center">
+      <div className="absolute inset-0 flex items-end justify-center p-3 lg:inset-y-0 lg:left-auto lg:right-0 lg:items-center lg:justify-end lg:p-0">
         <div
           ref={experienceRef}
           style={{
@@ -172,18 +172,18 @@ export default function SectionOverlays() {
               "0 0 40px rgba(5,8,20,0.7), 0 0 24px rgba(76,201,240,0.1), inset 0 1px 0 rgba(255,255,255,0.08)",
             backdropFilter: "blur(18px)",
           }}
-          className="hud-corners pointer-events-auto mr-8 w-[560px] max-w-[calc(100vw-4rem)] rounded-2xl border border-hud/25 p-8 lg:mr-24"
+          className="hud-corners pointer-events-auto w-full max-w-[440px] rounded-2xl border border-hud/25 p-5 lg:mr-24 lg:w-[560px] lg:max-w-[calc(100vw-4rem)] lg:p-8"
         >
           <Kicker>02 // Where I&apos;ve worked</Kicker>
 
-          <div className="mt-4 flex gap-3">
+          <div className="mt-4 flex flex-wrap gap-2 lg:gap-3">
             {EXPERIENCE.map((j, i) => (
               <button
                 key={j.company}
                 type="button"
                 data-cursor="hover"
                 onClick={() => setActiveJob(i)}
-                className={`rounded-full border px-5 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors ${
+                className={`rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors lg:px-5 ${
                   i === activeJob
                     ? "border-cyan bg-cyan/15 text-cyan-bright shadow-[0_0_14px_rgba(76,201,240,0.25)]"
                     : "border-white/20 text-star/70 hover:border-white/40 hover:text-star"
@@ -194,13 +194,13 @@ export default function SectionOverlays() {
             ))}
           </div>
 
-          <h3 className="mt-5 font-display text-[22px] font-bold leading-snug text-white">
+          <h3 className="mt-5 font-display text-lg font-bold leading-snug text-white lg:text-[22px]">
             {job.title} <span className="text-cyan">@ {job.company}</span>
           </h3>
           <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-hud/90">
             {job.range} · {job.location}
           </p>
-          <p className="mt-3 text-[15px] leading-relaxed text-white/85">
+          <p className="mt-3 text-sm leading-relaxed text-white/85 lg:text-[15px]">
             {job.blurb}
           </p>
 
@@ -213,12 +213,12 @@ export default function SectionOverlays() {
               scrollbarWidth: "thin",
               scrollbarColor: "rgba(76,201,240,0.35) transparent",
             }}
-            className="mt-4 max-h-[300px] space-y-3 overflow-y-auto pr-2"
+            className="mt-4 space-y-2.5 lg:max-h-[300px] lg:space-y-3 lg:overflow-y-auto lg:pr-2"
           >
             {job.points.map((point) => (
               <li
                 key={point}
-                className="flex gap-3 text-sm leading-relaxed text-white/80"
+                className="flex gap-3 text-[13px] leading-relaxed text-white/80 lg:text-sm"
               >
                 <span className="mt-0.5 shrink-0 text-cyan">▹</span>
                 <span>{point}</span>
@@ -294,7 +294,7 @@ export default function SectionOverlays() {
       </div>
 
       {/* ============ 04 // CONTACT ============ */}
-      <div className="absolute inset-y-0 right-0 flex items-center">
+      <div className="absolute inset-0 flex items-end justify-center p-3 lg:inset-y-0 lg:left-auto lg:right-0 lg:items-center lg:justify-end lg:p-0">
         <div
           ref={contactRef}
           style={{
@@ -305,14 +305,14 @@ export default function SectionOverlays() {
               "0 0 40px rgba(5,8,20,0.7), 0 0 24px rgba(76,201,240,0.1), inset 0 1px 0 rgba(255,255,255,0.08)",
             backdropFilter: "blur(18px)",
           }}
-          className="hud-corners pointer-events-auto mr-8 w-[460px] max-w-[calc(100vw-4rem)] rounded-2xl border border-hud/25 p-8 lg:mr-24"
+          className="hud-corners pointer-events-auto w-full max-w-[440px] rounded-2xl border border-hud/25 p-5 lg:mr-24 lg:w-[460px] lg:max-w-[calc(100vw-4rem)] lg:p-8"
         >
           <Kicker>04 // What&apos;s next</Kicker>
-          <h2 className="mt-2 font-display text-[34px] font-bold leading-[1.08] text-star">
+          <h2 className="mt-2 font-display text-2xl font-bold leading-[1.08] text-star lg:text-[34px]">
             Let&apos;s make something{" "}
             <span className="text-cyan">together</span>.
           </h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-white/80">
+          <p className="mt-4 text-sm leading-relaxed text-white/80 lg:text-[15px]">
             {CONTACT_COPY}
           </p>
 
@@ -320,7 +320,7 @@ export default function SectionOverlays() {
           <a
             href={`mailto:${PROFILE.email}`}
             data-cursor="hover"
-            className="mt-7 block w-full rounded-full bg-gradient-to-r from-cyan to-nebula py-3.5 text-center font-display text-lg font-semibold tracking-wide text-space transition hover:brightness-110 active:scale-[0.98]"
+            className="mt-6 block w-full rounded-full bg-gradient-to-r from-cyan to-nebula py-3 text-center font-display text-base font-semibold tracking-wide text-space transition hover:brightness-110 active:scale-[0.98] lg:mt-7 lg:py-3.5 lg:text-lg"
           >
             {PROFILE.email} →
           </a>
