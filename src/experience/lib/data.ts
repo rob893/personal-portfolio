@@ -16,7 +16,7 @@ export const PROFILE = {
   bio: "I'm a Principal Software Engineer at Microsoft who enjoys building cool stuff — from AI-powered developer platforms and cloud-scale services to game engines and the occasional emoji-only cache. I design systems that make thousands of engineers more productive.",
   about: {
     lead: 'I design and ship systems end to end — from cloud services and developer platforms to the AI tooling and automation that make engineering teams faster.',
-    p2: 'At Microsoft I build platforms used company-wide for security, compliance, and governance — including an internal MCP server and AI-powered code-transformation systems that have saved engineering-years of work.',
+    p2: 'At Microsoft, I build platforms used company-wide for security, compliance, and governance—including an internal MCP server and AI-powered code-transformation systems that have saved multiple engineering-years of effort.',
     p3: 'I care about building simple, fast, reliable software — designed for how people actually use it, not just clean on paper.',
     credentials: [
       'Principal Software Engineer @ Microsoft',
@@ -53,10 +53,10 @@ export const EXPERIENCE: Job[] = [
     location: 'Atlanta · Remote',
     blurb: 'Building AI-powered developer platforms used company-wide for security, compliance, and governance.',
     points: [
-      'Designed and built an internal Model Context Protocol (MCP) server that became a primary way engineers and AI agents interact with the platform — scaled from a few hundred to ~9,500 monthly users, serving millions of requests weekly',
+      "Designed and built an internal Model Context Protocol (MCP) server that became a primary way engineers and AI agents interact with my team's platform — scaled from a few hundred to ~9,500 monthly users, serving millions of requests weekly",
       "Authored my org's official guidelines for building remote MCP servers — now the org-wide standard, letting teams ship servers that are secure and compliant by default",
-      'Led an AI-powered code-transformation system that auto-opens PRs fixing security and compliance violations — an estimated 5+ engineering-years saved in a single half',
-      'Built a high-performance, cache-backed data-access SDK now load-bearing across services — cutting key p50 latencies roughly in half',
+      'Led the effort to build an AI-powered code-transformation system that auto-opens PRs fixing security and compliance violations — saving an estimated 5+ engineering-years in a six month period',
+      'Built a high-performance, cache-backed data-access (Kusto/Azure Data Explorer) SDK now load-bearing across multiple services — cutting key p50 latencies roughly in half',
       'Built (Electron, React, TypeScript) an internal dev-tools app every engineer on the team now uses daily'
     ]
   },
@@ -70,7 +70,7 @@ export const EXPERIENCE: Job[] = [
     points: [
       'Led a team building a system that scans Microsoft source for security violations and, using AI, opens automatic fix PRs — thousands of PRs, tens of thousands of dev-hours saved',
       'Designed and built from scratch a deployment-gate system (Azure Functions) running ~200 e2e tests against canary regions in CI — blocking bad builds and helping sustain a 99.9% uptime SLA',
-      'Built a syncing system (.NET + Hangfire) that auto-creates Azure DevOps work items company-wide, cutting resolution time ~20%',
+      'Built a syncing system (.NET + Hangfire) that auto-creates Azure DevOps work items company-wide, cutting resolution time of flagged violations by ~20%',
       'Led incident response for a major auth vulnerability across all services; authored the postmortem presented to senior leadership',
       'Earned the Azure Impact Award in both 2023 and 2024'
     ]
@@ -171,7 +171,7 @@ export const PROJECTS: Project[] = [
     meta: '2021 · Web app',
     tagline: 'Track prices, get alerts',
     description:
-      'A service + PWA that tracks World of Warcraft auction prices with watch lists and price-movement alerts. RESTful API with JSON Patch, EF Core migrations, background jobs, and event-based alerting.',
+      'A service + PWA that tracks World of Warcraft auction prices with watch lists and price-movement alerts. RESTful API, EF Core, background jobs, and event-based alerting.',
     tags: ['Vue.js', 'C#', '.NET', 'Azure', 'Hangfire'],
     colorA: '#0069ff',
     colorB: '#4cc9f0',
