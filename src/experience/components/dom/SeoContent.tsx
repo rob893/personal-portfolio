@@ -1,4 +1,4 @@
-import { PROFILE, EXPERIENCE, SKILLS, PROJECTS } from "@/lib/data";
+import { PROFILE, EXPERIENCE, SKILLS, PROJECTS } from '@/lib/data';
 
 /**
  * A complete, semantic, text-only rendering of the portfolio.
@@ -35,7 +35,7 @@ export default function SeoContent() {
 
       <section aria-label="Work experience">
         <h2>Experience</h2>
-        {EXPERIENCE.map((job) => (
+        {EXPERIENCE.map(job => (
           <article key={`${job.company}-${job.range}`}>
             <h3>
               {job.title} — {job.company}
@@ -55,7 +55,7 @@ export default function SeoContent() {
 
       <section aria-label="Projects">
         <h2>Projects</h2>
-        {PROJECTS.map((project) => (
+        {PROJECTS.map(project => (
           <article key={project.id}>
             <h3>
               {project.link ? (
@@ -70,7 +70,6 @@ export default function SeoContent() {
               {project.meta} — {project.tagline}
             </p>
             <p>{project.description}</p>
-            <p>Built with: {project.tags.join(", ")}.</p>
           </article>
         ))}
       </section>
@@ -78,7 +77,7 @@ export default function SeoContent() {
       <section aria-label="Skills">
         <h2>Skills</h2>
         <ul>
-          {SKILLS.map((skill) => (
+          {SKILLS.map(skill => (
             <li key={skill.num}>
               <strong>{skill.name}:</strong> {skill.items}
             </li>
@@ -98,8 +97,7 @@ export default function SeoContent() {
       <section aria-label="Contact">
         <h2>Contact</h2>
         <p>
-          Email:{" "}
-          <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
+          Email: <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
         </p>
         <p>Location: {PROFILE.location}</p>
         <ul>

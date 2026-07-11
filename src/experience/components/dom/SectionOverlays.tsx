@@ -1,9 +1,9 @@
-import { useRef, useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
-import { AnimatePresence, motion } from "motion/react";
-import { ARCHIVE_URL, EXPERIENCE, PROFILE, PROJECTS } from "@/lib/data";
-import { useScrollRaf } from "@/lib/scroll";
-import { useUIStore } from "@/lib/store";
+import { useRef, useState } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { ARCHIVE_URL, EXPERIENCE, PROFILE, PROJECTS } from '@/lib/data';
+import { useScrollRaf } from '@/lib/scroll';
+import { useUIStore } from '@/lib/store';
 
 /* ------------------------------------------------------------------ */
 /* Scroll envelope helpers                                             */
@@ -15,13 +15,7 @@ function smoothstep(a: number, b: number, x: number): number {
 }
 
 /** alpha ramps in over [a0,a1] and back out over [b0,b1]. */
-function envelope(
-  p: number,
-  a0: number,
-  a1: number,
-  b0: number,
-  b1: number
-): number {
+function envelope(p: number, a0: number, a1: number, b0: number, b1: number): number {
   return smoothstep(a0, a1, p) * (1 - smoothstep(b0, b1, p));
 }
 
@@ -36,13 +30,13 @@ function applyPanel(
   last.current = alpha;
   el.style.opacity = alpha.toFixed(4);
   el.style.transform = transform(alpha);
-  el.style.visibility = alpha < 0.02 ? "hidden" : "visible";
+  el.style.visibility = alpha < 0.02 ? 'hidden' : 'visible';
 }
 
 const HIDDEN: CSSProperties = {
   opacity: 0,
-  visibility: "hidden",
-  willChange: "opacity, transform",
+  visibility: 'hidden',
+  willChange: 'opacity, transform'
 };
 
 /* ------------------------------------------------------------------ */
@@ -50,15 +44,11 @@ const HIDDEN: CSSProperties = {
 /* ------------------------------------------------------------------ */
 
 function Kicker({ children }: { children: ReactNode }) {
-  return (
-    <p className="font-mono text-xs tracking-hud text-hud uppercase">
-      {children}
-    </p>
-  );
+  return <p className="font-mono text-xs tracking-hud text-hud uppercase">{children}</p>;
 }
 
 const CONTACT_COPY =
-  "Whether you want to talk shop about distributed systems, AI tooling, or a side-project idea — my inbox is always open and the best way to reach me.";
+  'Whether you want to talk shop about distributed systems, AI tooling, or a side-project idea — my inbox is always open and the best way to reach me.';
 
 /* ------------------------------------------------------------------ */
 
@@ -74,36 +64,36 @@ export default function SectionOverlays() {
   const lastProjects = useRef(-1);
   const lastContact = useRef(-1);
 
-  useScrollRaf((p) => {
+  useScrollRaf(p => {
     applyPanel(
       aboutRef.current,
       lastAbout,
       envelope(p, 0.205, 0.235, 0.315, 0.34),
-      (a) => `translateX(${(-40 * (1 - a)).toFixed(2)}px)`
+      a => `translateX(${(-40 * (1 - a)).toFixed(2)}px)`
     );
     applyPanel(
       experienceRef.current,
       lastExperience,
       envelope(p, 0.355, 0.39, 0.475, 0.5),
-      (a) => `translateX(${(40 * (1 - a)).toFixed(2)}px)`
+      a => `translateX(${(40 * (1 - a)).toFixed(2)}px)`
     );
     applyPanel(
       skillsRef.current,
       lastSkills,
       envelope(p, 0.51, 0.54, 0.595, 0.62),
-      (a) => `translateY(${(-18 * (1 - a)).toFixed(2)}px)`
+      a => `translateY(${(-18 * (1 - a)).toFixed(2)}px)`
     );
     applyPanel(
       projectsRef.current,
       lastProjects,
       envelope(p, 0.635, 0.665, 0.775, 0.8),
-      (a) => `translateX(${(-28 * (1 - a)).toFixed(2)}px)`
+      a => `translateX(${(-28 * (1 - a)).toFixed(2)}px)`
     );
     applyPanel(
       contactRef.current,
       lastContact,
       smoothstep(0.82, 0.875, p),
-      (a) => `translateX(${(40 * (1 - a)).toFixed(2)}px)`
+      a => `translateX(${(40 * (1 - a)).toFixed(2)}px)`
     );
   });
 
@@ -112,10 +102,8 @@ export default function SectionOverlays() {
   const job = EXPERIENCE[activeJob];
 
   /* ---------------- projects hover chip ---------------- */
-  const hoveredId = useUIStore((s) => s.hoveredProject);
-  const hovered = hoveredId
-    ? (PROJECTS.find((pr) => pr.id === hoveredId) ?? null)
-    : null;
+  const hoveredId = useUIStore(s => s.hoveredProject);
+  const hovered = hoveredId ? (PROJECTS.find(pr => pr.id === hoveredId) ?? null) : null;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-10">
@@ -125,11 +113,9 @@ export default function SectionOverlays() {
           ref={aboutRef}
           style={{
             ...HIDDEN,
-            background:
-              "linear-gradient(150deg, rgba(14,20,42,0.94), rgba(6,8,20,0.94))",
-            boxShadow:
-              "0 0 40px rgba(5,8,20,0.7), 0 0 24px rgba(76,201,240,0.1), inset 0 1px 0 rgba(255,255,255,0.08)",
-            backdropFilter: "blur(18px)",
+            background: 'linear-gradient(150deg, rgba(14,20,42,0.94), rgba(6,8,20,0.94))',
+            boxShadow: '0 0 40px rgba(5,8,20,0.7), 0 0 24px rgba(76,201,240,0.1), inset 0 1px 0 rgba(255,255,255,0.08)',
+            backdropFilter: 'blur(18px)'
           }}
           className="hud-corners w-full max-w-[440px] rounded-2xl border border-hud/25 p-5 lg:ml-16 lg:w-[470px] lg:max-w-[calc(100vw-4rem)] lg:p-8"
         >
@@ -137,22 +123,15 @@ export default function SectionOverlays() {
           <h2 className="mt-2 font-display text-[26px] font-bold leading-[1.05] text-star lg:mt-3 lg:text-[40px]">
             Build cool stuff, <span className="text-cyan">ship it fast</span>
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-white/85 lg:mt-5 lg:text-[15px]">
-            {PROFILE.about.lead}
-          </p>
-          <p className="mt-3 text-[13px] leading-relaxed text-white/75 lg:mt-4 lg:text-sm">
-            {PROFILE.about.p2}
-          </p>
+          <p className="mt-3 text-sm leading-relaxed text-white/85 lg:mt-5 lg:text-[15px]">{PROFILE.about.lead}</p>
+          <p className="mt-3 text-[13px] leading-relaxed text-white/75 lg:mt-4 lg:text-sm">{PROFILE.about.p2}</p>
           <p className="mt-3 hidden text-[13px] leading-relaxed text-white/75 sm:block lg:mt-4 lg:text-sm">
             {PROFILE.about.p3}
           </p>
           <div className="hud-line mt-4 lg:mt-6" />
           <ul className="mt-4 space-y-2 lg:mt-5">
-            {PROFILE.about.credentials.map((cred) => (
-              <li
-                key={cred}
-                className="font-mono text-xs uppercase tracking-wide text-star/85"
-              >
+            {PROFILE.about.credentials.map(cred => (
+              <li key={cred} className="font-mono text-xs uppercase tracking-wide text-star/85">
                 <span className="text-cyan">▹</span> {cred}
               </li>
             ))}
@@ -166,11 +145,9 @@ export default function SectionOverlays() {
           ref={experienceRef}
           style={{
             ...HIDDEN,
-            background:
-              "linear-gradient(150deg, rgba(14,20,42,0.94), rgba(6,8,20,0.94))",
-            boxShadow:
-              "0 0 40px rgba(5,8,20,0.7), 0 0 24px rgba(76,201,240,0.1), inset 0 1px 0 rgba(255,255,255,0.08)",
-            backdropFilter: "blur(18px)",
+            background: 'linear-gradient(150deg, rgba(14,20,42,0.94), rgba(6,8,20,0.94))',
+            boxShadow: '0 0 40px rgba(5,8,20,0.7), 0 0 24px rgba(76,201,240,0.1), inset 0 1px 0 rgba(255,255,255,0.08)',
+            backdropFilter: 'blur(18px)'
           }}
           className="hud-corners pointer-events-auto w-full max-w-[440px] rounded-2xl border border-hud/25 p-5 lg:mr-24 lg:w-[560px] lg:max-w-[calc(100vw-4rem)] lg:p-8"
         >
@@ -185,11 +162,11 @@ export default function SectionOverlays() {
                 onClick={() => setActiveJob(i)}
                 className={`rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.14em] transition-colors lg:px-5 ${
                   i === activeJob
-                    ? "border-cyan bg-cyan/15 text-cyan-bright shadow-[0_0_14px_rgba(76,201,240,0.25)]"
-                    : "border-white/20 text-star/70 hover:border-white/40 hover:text-star"
+                    ? 'border-cyan bg-cyan/15 text-cyan-bright shadow-[0_0_14px_rgba(76,201,240,0.25)]'
+                    : 'border-white/20 text-star/70 hover:border-white/40 hover:text-star'
                 }`}
               >
-                {j.company.split(" ")[0]}
+                {j.company.split(' ')[0]}
               </button>
             ))}
           </div>
@@ -200,26 +177,21 @@ export default function SectionOverlays() {
           <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-hud/90">
             {job.range} · {job.location}
           </p>
-          <p className="mt-3 text-sm leading-relaxed text-white/85 lg:text-[15px]">
-            {job.blurb}
-          </p>
+          <p className="mt-3 text-sm leading-relaxed text-white/85 lg:text-[15px]">{job.blurb}</p>
 
           <div className="hud-line mt-4" />
 
           <ul
             key={activeJob}
-            onWheel={(e) => e.stopPropagation()}
+            onWheel={e => e.stopPropagation()}
             style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(76,201,240,0.35) transparent",
+              scrollbarWidth: 'thin',
+              scrollbarColor: 'rgba(76,201,240,0.35) transparent'
             }}
             className="mt-4 space-y-2.5 lg:max-h-[300px] lg:space-y-3 lg:overflow-y-auto lg:pr-2"
           >
-            {job.points.map((point) => (
-              <li
-                key={point}
-                className="flex gap-3 text-[13px] leading-relaxed text-white/80 lg:text-sm"
-              >
+            {job.points.map(point => (
+              <li key={point} className="flex gap-3 text-[13px] leading-relaxed text-white/80 lg:text-sm">
                 <span className="mt-0.5 shrink-0 text-cyan">▹</span>
                 <span>{point}</span>
               </li>
@@ -231,19 +203,16 @@ export default function SectionOverlays() {
       {/* ============ SKILLS ============ */}
       <div className="absolute inset-x-0 top-28 flex justify-center">
         <div ref={skillsRef} style={HIDDEN} className="px-6 text-center">
-          <Kicker>{"// Systems check"}</Kicker>
+          <Kicker>{'// Systems check'}</Kicker>
           <h2
             className="mt-2 font-display text-[28px] font-bold text-star"
             style={{
-              textShadow:
-                "0 0 24px rgba(76,201,240,0.45), 0 0 64px rgba(124,58,237,0.35)",
+              textShadow: '0 0 24px rgba(76,201,240,0.45), 0 0 64px rgba(124,58,237,0.35)'
             }}
           >
             Skill modules online
           </h2>
-          <p className="mt-2 font-mono text-xs tracking-[0.3em] text-white/40">
-            FLY THROUGH THE CALIBRATION CORRIDOR
-          </p>
+          <p className="mt-2 font-mono text-xs tracking-[0.3em] text-white/40">FLY THROUGH THE CALIBRATION CORRIDOR</p>
         </div>
       </div>
 
@@ -253,13 +222,11 @@ export default function SectionOverlays() {
           <Kicker>03 // Some things I&apos;ve built</Kicker>
           <h2
             className="mt-2 font-display text-[34px] font-bold text-star"
-            style={{ textShadow: "0 0 28px rgba(124,58,237,0.4)" }}
+            style={{ textShadow: '0 0 28px rgba(124,58,237,0.4)' }}
           >
             Projects in orbit
           </h2>
-          <p className="mt-3 animate-blink font-mono text-xs tracking-[0.2em] text-hud">
-            ▸ CLICK A CARD TO INSPECT
-          </p>
+          <p className="mt-3 animate-blink font-mono text-xs tracking-[0.2em] text-hud">▸ CLICK A CARD TO INSPECT</p>
           <a
             href={ARCHIVE_URL}
             target="_blank"
@@ -281,7 +248,7 @@ export default function SectionOverlays() {
               initial={{ opacity: 0, y: 12, scale: 0.92 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 6, scale: 0.96 }}
-              transition={{ duration: 0.22, ease: "easeOut" }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
               className="glass flex items-center gap-2.5 rounded-full px-4 py-2"
             >
               <span className="block h-1.5 w-1.5 rotate-45 animate-blink bg-cyan shadow-[0_0_8px_rgba(76,201,240,0.9)]" />
@@ -299,22 +266,17 @@ export default function SectionOverlays() {
           ref={contactRef}
           style={{
             ...HIDDEN,
-            background:
-              "linear-gradient(150deg, rgba(14,20,42,0.94), rgba(6,8,20,0.94))",
-            boxShadow:
-              "0 0 40px rgba(5,8,20,0.7), 0 0 24px rgba(76,201,240,0.1), inset 0 1px 0 rgba(255,255,255,0.08)",
-            backdropFilter: "blur(18px)",
+            background: 'linear-gradient(150deg, rgba(14,20,42,0.94), rgba(6,8,20,0.94))',
+            boxShadow: '0 0 40px rgba(5,8,20,0.7), 0 0 24px rgba(76,201,240,0.1), inset 0 1px 0 rgba(255,255,255,0.08)',
+            backdropFilter: 'blur(18px)'
           }}
           className="hud-corners pointer-events-auto w-full max-w-[440px] rounded-2xl border border-hud/25 p-5 lg:mr-24 lg:w-[460px] lg:max-w-[calc(100vw-4rem)] lg:p-8"
         >
           <Kicker>04 // What&apos;s next</Kicker>
           <h2 className="mt-2 font-display text-2xl font-bold leading-[1.08] text-star lg:text-[34px]">
-            Let&apos;s make something{" "}
-            <span className="text-cyan">together</span>.
+            Let&apos;s make something <span className="text-cyan">together</span>.
           </h2>
-          <p className="mt-4 text-sm leading-relaxed text-white/80 lg:text-[15px]">
-            {CONTACT_COPY}
-          </p>
+          <p className="mt-4 text-sm leading-relaxed text-white/80 lg:text-[15px]">{CONTACT_COPY}</p>
 
           {/* No backend, no forms — straight to the inbox */}
           <a
@@ -375,7 +337,7 @@ export default function SectionOverlays() {
           </div>
 
           <p className="mt-5 font-mono text-[10px] tracking-[0.14em] text-white/25">
-            © {new Date().getFullYear()} ROBERT HERBER — BUILT WITH REACT + R3F
+            © {new Date().getFullYear()} ROBERT HERBER
           </p>
         </div>
       </div>
