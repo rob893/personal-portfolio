@@ -486,7 +486,74 @@ main {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
+  margin-bottom: 22px;
+}
+
+.interactive-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 30px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  background: linear-gradient(120deg, rgba(139, 92, 246, 0.12), rgba(56, 189, 248, 0.1));
+  border: 1px solid var(--border-strong);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.interactive-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(167, 139, 250, 0.18), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 3.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%,
+  60% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.interactive-link:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-2);
+  box-shadow: 0 12px 30px -12px var(--accent-glow);
+}
+
+.interactive-icon {
+  display: inline-flex;
+  color: var(--accent-2);
+}
+
+.interactive-text {
+  position: relative;
+}
+
+.interactive-arrow {
+  position: relative;
+  color: var(--accent-2);
+  transition: transform 0.25s ease;
+}
+
+.interactive-link:hover .interactive-arrow {
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive-link::before {
+    animation: none;
+  }
 }
 
 .hero-social {
