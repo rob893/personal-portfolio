@@ -140,7 +140,7 @@ export default function SectionOverlays() {
       </div>
 
       {/* ============ 02 // EXPERIENCE ============ */}
-      <div className="absolute inset-0 flex items-end justify-center p-3 lg:inset-y-0 lg:left-auto lg:right-0 lg:items-center lg:justify-end lg:p-0">
+      <div className="absolute inset-0 flex items-start justify-center p-3 pt-[72px] lg:inset-y-0 lg:left-auto lg:right-0 lg:items-center lg:justify-end lg:p-0 lg:pt-0">
         <div
           ref={experienceRef}
           style={{
@@ -149,7 +149,7 @@ export default function SectionOverlays() {
             boxShadow: '0 0 40px rgba(5,8,20,0.7), 0 0 24px rgba(76,201,240,0.1), inset 0 1px 0 rgba(255,255,255,0.08)',
             backdropFilter: 'blur(18px)'
           }}
-          className="hud-corners pointer-events-auto w-full max-w-[440px] rounded-2xl border border-hud/25 p-5 lg:mr-24 lg:w-[560px] lg:max-w-[calc(100vw-4rem)] lg:p-8"
+          className="hud-corners pointer-events-auto flex max-h-[calc(100dvh-84px)] w-full max-w-[440px] flex-col rounded-2xl border border-hud/25 p-5 lg:mr-24 lg:block lg:max-h-none lg:w-[560px] lg:max-w-[calc(100vw-4rem)] lg:p-8"
         >
           <Kicker>02 // Where I&apos;ve worked</Kicker>
 
@@ -188,7 +188,7 @@ export default function SectionOverlays() {
               scrollbarWidth: 'thin',
               scrollbarColor: 'rgba(76,201,240,0.35) transparent'
             }}
-            className="mt-4 space-y-2.5 lg:max-h-[300px] lg:space-y-3 lg:overflow-y-auto lg:pr-2"
+            className="mt-4 min-h-0 flex-1 space-y-2.5 overflow-y-auto pr-2 lg:max-h-[300px] lg:flex-none lg:space-y-3"
           >
             {job.points.map(point => (
               <li key={point} className="flex gap-3 text-[13px] leading-relaxed text-white/80 lg:text-sm">

@@ -148,7 +148,14 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="glass pointer-events-auto absolute inset-x-3 top-[72px] flex flex-col gap-1 rounded-2xl border border-hud/25 p-3 lg:hidden"
+            style={{
+              background:
+                "linear-gradient(150deg, rgba(14,20,42,0.985), rgba(6,8,20,0.985))",
+              boxShadow:
+                "0 20px 50px rgba(2,4,12,0.6), 0 0 24px rgba(76,201,240,0.1), inset 0 1px 0 rgba(255,255,255,0.08)",
+              backdropFilter: "blur(20px)",
+            }}
+            className="pointer-events-auto absolute inset-x-3 top-[72px] flex flex-col gap-1 rounded-2xl border border-hud/30 p-3 lg:hidden"
           >
             {LINKS.map((link) => (
               <button
