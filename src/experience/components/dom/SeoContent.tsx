@@ -36,7 +36,7 @@ export default function SeoContent() {
       <section aria-label="Work experience">
         <h2>Experience</h2>
         {EXPERIENCE.map((job) => (
-          <article key={job.company}>
+          <article key={`${job.company}-${job.range}`}>
             <h3>
               {job.title} — {job.company}
             </h3>

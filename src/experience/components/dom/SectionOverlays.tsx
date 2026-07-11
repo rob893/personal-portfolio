@@ -179,7 +179,7 @@ export default function SectionOverlays() {
           <div className="mt-4 flex flex-wrap gap-2 lg:gap-3">
             {EXPERIENCE.map((j, i) => (
               <button
-                key={j.company}
+                key={`${j.company}-${j.range}`}
                 type="button"
                 data-cursor="hover"
                 onClick={() => setActiveJob(i)}
