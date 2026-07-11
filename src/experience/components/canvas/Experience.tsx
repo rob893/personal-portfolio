@@ -94,7 +94,7 @@ function DeferredPrecompile() {
 }
 
 /**
- * The heavy, off-hero GLB models (ISS 4.4 MB, astronaut, spaceship — none
+ * The off-hero GLB models (optimized ISS, astronaut, spaceship — none
  * appear in the hero) — mounted only AFTER the hero is on screen and
  * interactive (ready === true), so first paint never waits on them. They
  * stream in the background, then precompile (env already set) so scrolling

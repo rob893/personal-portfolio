@@ -5,6 +5,11 @@ import { scrollState } from "@/lib/scroll";
 import { combatState } from "@/lib/combat";
 import { createEnemyHull } from "@/lib/rocketModel";
 import { makeGlowTexture } from "@/lib/textures";
+import {
+  createRocketPlumeGeometry,
+  createRocketPlumeMaterial,
+  ROCKET_EXHAUSTS,
+} from "@/lib/rocketExhaust";
 
 /**
  * Combat — an optional, playful layer over the flight: enemy ships drift
@@ -17,10 +22,13 @@ import { makeGlowTexture } from "@/lib/textures";
 
 const ENEMY_COUNT = 4;
 const LASER_POOL = 32;
+const ENEMY_LASER_POOL = 24;
 const BURST_POOL = 12;
 
 const LASER_SPEED = 120; // world units / sec
 const LASER_LIFE = 1.8; // seconds
+const ENEMY_LASER_SPEED = 85;
+const ENEMY_LASER_LIFE = 2.2;
 const HIT_RADIUS = 2.6; // laser–enemy kill distance
 const ENEMY_SCALE = 0.5;
 const SPAWN_MIN = 26;
@@ -56,10 +64,16 @@ type Enemy = {
   group: THREE.Group;
   pos: THREE.Vector3;
   vel: THREE.Vector3;
+  plumesOuter: THREE.Mesh[];
+  plumesInner: THREE.Mesh[];
+  glows: THREE.Sprite[];
+  engineLight: THREE.PointLight;
   alive: boolean;
   respawn: number; // seconds until respawn when dead
   spin: number;
   bob: number;
+  thrustPhase: number;
+  shotTimer: number;
 };
 
 type Laser = {
@@ -82,25 +96,94 @@ type Burst = {
 export default function Combat() {
   const { camera, gl } = useThree();
 
+  const enemyThrust = useMemo(() => {
+    const geometry = createRocketPlumeGeometry();
+    const outerMaterial = createRocketPlumeMaterial(
+      new THREE.Color(2.2, 1.2, 0.65),
+      new THREE.Color(2.0, 0.35, 0.12),
+      new THREE.Color(0.9, 0.03, 0.01),
+      0.9
+    );
+    const innerMaterial = createRocketPlumeMaterial(
+      new THREE.Color(2.8, 2.2, 1.5),
+      new THREE.Color(2.4, 0.8, 0.25),
+      new THREE.Color(1.5, 0.12, 0.03),
+      1
+    );
+    const glowTexture = makeGlowTexture("rgba(255,72,32,1)");
+    const glowMaterial = new THREE.SpriteMaterial({
+      map: glowTexture,
+      transparent: true,
+      opacity: 0.72,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      fog: false,
+    });
+    return { geometry, outerMaterial, innerMaterial, glowTexture, glowMaterial };
+  }, []);
+
   /* ---- enemy pool (red rocket hull) ---- */
   const enemies = useMemo<Enemy[]>(() => {
     return Array.from({ length: ENEMY_COUNT }, () => {
       const group = new THREE.Group();
       const model = createEnemyHull();
       model.scale.setScalar(ENEMY_SCALE);
-      group.add(model);
+      const exhaustRoot = new THREE.Group();
+      const plumesOuter: THREE.Mesh[] = [];
+      const plumesInner: THREE.Mesh[] = [];
+      const glows: THREE.Sprite[] = [];
+
+      exhaustRoot.scale.setScalar(ENEMY_SCALE);
+      for (const exhaust of ROCKET_EXHAUSTS) {
+        const nozzle = new THREE.Group();
+        nozzle.position.set(...exhaust.pos);
+        nozzle.scale.setScalar(exhaust.scale);
+
+        const outer = new THREE.Mesh(enemyThrust.geometry, enemyThrust.outerMaterial);
+        outer.renderOrder = 10;
+        outer.frustumCulled = false;
+        plumesOuter.push(outer);
+        nozzle.add(outer);
+
+        const inner = new THREE.Mesh(enemyThrust.geometry, enemyThrust.innerMaterial);
+        inner.scale.set(0.5, 0.5, 0.5);
+        inner.renderOrder = 10;
+        inner.frustumCulled = false;
+        plumesInner.push(inner);
+        nozzle.add(inner);
+
+        const glow = new THREE.Sprite(enemyThrust.glowMaterial);
+        glow.position.set(0, -0.08, 0);
+        glow.scale.set(0.8, 0.8, 1);
+        glow.renderOrder = 11;
+        glows.push(glow);
+        nozzle.add(glow);
+
+        exhaustRoot.add(nozzle);
+      }
+
+      const engineLight = new THREE.PointLight("#ff4820", 4, 9, 2);
+      engineLight.position.set(0, -1.9, 0);
+      exhaustRoot.add(engineLight);
+      group.add(model, exhaustRoot);
       group.visible = false;
       return {
         group,
         pos: new THREE.Vector3(),
         vel: new THREE.Vector3(),
+        plumesOuter,
+        plumesInner,
+        glows,
+        engineLight,
         alive: false,
         respawn: Math.random() * 1.5,
         spin: 0,
         bob: Math.random() * Math.PI * 2,
+        thrustPhase: Math.random() * Math.PI * 2,
+        shotTimer: 1 + Math.random() * 3,
       };
     });
-  }, []);
+  }, [enemyThrust]);
 
   /* ---- laser pool (tapered additive bolt) ---- */
   const lasers = useMemo<Laser[]>(() => {
@@ -114,6 +197,31 @@ export default function Combat() {
       toneMapped: false,
     });
     return Array.from({ length: LASER_POOL }, () => {
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.visible = false;
+      mesh.frustumCulled = false;
+      return {
+        mesh,
+        pos: new THREE.Vector3(),
+        dir: new THREE.Vector3(),
+        life: 0,
+        active: false,
+      };
+    });
+  }, []);
+
+  /* ---- cosmetic enemy laser pool ---- */
+  const enemyLasers = useMemo<Laser[]>(() => {
+    const geo = new THREE.CylinderGeometry(0.04, 0.12, 2.5, 6);
+    const mat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color("#ff4b2b"),
+      transparent: true,
+      opacity: 0.95,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      toneMapped: false,
+    });
+    return Array.from({ length: ENEMY_LASER_POOL }, () => {
       const mesh = new THREE.Mesh(geo, mat);
       mesh.visible = false;
       mesh.frustumCulled = false;
@@ -147,7 +255,18 @@ export default function Combat() {
   }, []);
 
   const laserCursor = useRef(0);
+  const enemyLaserCursor = useRef(0);
   const burstCursor = useRef(0);
+
+  useEffect(() => {
+    return () => {
+      enemyThrust.geometry.dispose();
+      enemyThrust.outerMaterial.dispose();
+      enemyThrust.innerMaterial.dispose();
+      enemyThrust.glowMaterial.dispose();
+      enemyThrust.glowTexture.dispose();
+    };
+  }, [enemyThrust]);
 
   /** Position an enemy at a random point in the volume ahead of the camera. */
   const spawnEnemy = (e: Enemy) => {
@@ -172,6 +291,7 @@ export default function Combat() {
       .addScaledVector(_right, (Math.random() - 0.5) * 6);
     e.alive = true;
     e.spin = (Math.random() - 0.5) * 0.8;
+    e.shotTimer = 1.2 + Math.random() * 3.5;
     e.group.visible = true;
 
     // Don't spawn inside a planet — nudge out to the surface if we did.
@@ -225,6 +345,10 @@ export default function Combat() {
     const dt = Math.min(delta, 0.05);
     const t = state.clock.elapsedTime;
     camera.getWorldDirection(_camDir);
+    enemyThrust.outerMaterial.uniforms.uTime.value = t;
+    enemyThrust.outerMaterial.uniforms.uThrust.value = 1;
+    enemyThrust.innerMaterial.uniforms.uTime.value = t;
+    enemyThrust.innerMaterial.uniforms.uThrust.value = 1;
 
     /* -------- enemies -------- */
     for (const e of enemies) {
@@ -267,6 +391,38 @@ export default function Combat() {
         e.group.quaternion.slerp(_q, 0.05);
       }
       e.group.rotateY(e.spin * dt);
+
+      e.shotTimer -= dt;
+      if (
+        e.shotTimer <= 0 &&
+        combatState.ready &&
+        scrollState.impact <= 0.5
+      ) {
+        const laser =
+          enemyLasers[enemyLaserCursor.current % ENEMY_LASER_POOL];
+        enemyLaserCursor.current++;
+        _v2.copy(e.vel).normalize();
+        laser.pos.copy(e.pos).addScaledVector(_v2, ENEMY_SCALE * 1.7);
+        laser.dir.copy(combatState.shipPos).sub(laser.pos).normalize();
+        laser.life = ENEMY_LASER_LIFE;
+        laser.active = true;
+        laser.mesh.visible = true;
+        e.shotTimer = 2 + Math.random() * 4;
+      }
+
+      const thrust = 0.88 + Math.sin(t * 18 + e.thrustPhase) * 0.12;
+      const plumeLen = 1.7 + thrust * 0.75;
+      for (const plume of e.plumesOuter) {
+        plume.scale.y = plumeLen;
+      }
+      for (const plume of e.plumesInner) {
+        plume.scale.y = plumeLen * 0.72;
+      }
+      for (const glow of e.glows) {
+        const scale = 0.7 + thrust * 0.45;
+        glow.scale.set(scale, scale, 1);
+      }
+      e.engineLight.intensity = 3.5 + thrust * 2.5;
     }
 
     /* -------- lasers + collisions -------- */
@@ -299,6 +455,23 @@ export default function Combat() {
       l.mesh.quaternion.copy(_q);
     }
 
+    /* -------- cosmetic enemy lasers -------- */
+    for (const l of enemyLasers) {
+      if (!l.active) continue;
+      l.pos.addScaledVector(l.dir, ENEMY_LASER_SPEED * dt);
+      l.life -= dt;
+
+      if (l.life <= 0) {
+        l.active = false;
+        l.mesh.visible = false;
+        continue;
+      }
+
+      l.mesh.position.copy(l.pos);
+      _q.setFromUnitVectors(UP, l.dir);
+      l.mesh.quaternion.copy(_q);
+    }
+
     /* -------- explosions -------- */
     for (const b of bursts) {
       if (!b.active) continue;
@@ -319,6 +492,9 @@ export default function Combat() {
     for (const l of lasers) {
       if (l.active) (l.mesh.material as THREE.MeshBasicMaterial).opacity = flick;
     }
+    for (const l of enemyLasers) {
+      if (l.active) (l.mesh.material as THREE.MeshBasicMaterial).opacity = flick;
+    }
   });
 
   return (
@@ -328,6 +504,9 @@ export default function Combat() {
       ))}
       {lasers.map((l, i) => (
         <primitive key={`laser-${i}`} object={l.mesh} />
+      ))}
+      {enemyLasers.map((l, i) => (
+        <primitive key={`enemy-laser-${i}`} object={l.mesh} />
       ))}
       {bursts.map((b, i) => (
         <primitive key={`burst-${i}`} object={b.sprite} />
