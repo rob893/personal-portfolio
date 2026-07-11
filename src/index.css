@@ -391,16 +391,6 @@ main {
   transform: none;
 }
 
-.stat-delay-0.in {
-  transition-delay: 0s;
-}
-.stat-delay-1.in {
-  transition-delay: 0.08s;
-}
-.stat-delay-2.in {
-  transition-delay: 0.16s;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;
@@ -570,47 +560,6 @@ main {
   50% {
     transform: translate(-50%, 8px);
   }
-}
-
-/* ===== Impact ===== */
-.impact-intro {
-  color: var(--text-dim);
-  max-width: 60ch;
-  margin: -24px 0 40px;
-  font-size: 16px;
-}
-
-.stat-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-
-.stat-card {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 28px;
-}
-
-.stat-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-strong);
-}
-
-.stat-value {
-  font-size: clamp(30px, 4.5vw, 44px);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  background: linear-gradient(120deg, var(--accent-2), #38bdf8);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.stat-label {
-  font-size: 14px;
-  color: var(--text-dim);
 }
 
 /* ===== Timeline ===== */
@@ -1001,9 +950,6 @@ main {
   .hero-portrait {
     order: -1;
   }
-  .stat-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .timeline-item {
     grid-template-columns: 1fr;
   }
@@ -1018,9 +964,6 @@ main {
 @media (max-width: 480px) {
   .brand-name {
     display: none;
-  }
-  .stat-grid {
-    grid-template-columns: 1fr;
   }
   .project-grid,
   .skills-grid {

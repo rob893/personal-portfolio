@@ -5,7 +5,6 @@ import { experience } from './data/experience.ts';
 import { projects, type Project } from './data/projects.ts';
 import { skillGroups } from './data/skills.ts';
 import { education, awards } from './data/education.ts';
-import { highlights } from './data/highlights.ts';
 import {
   GitHubIcon,
   LinkedInIcon,
@@ -24,7 +23,6 @@ const LINKEDIN = 'https://www.linkedin.com/in/robert-herber-2b9837b8/';
 
 const NAV = [
   { id: 'about', label: 'About' },
-  { id: 'impact', label: 'Impact' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
   { id: 'skills', label: 'Skills' },
@@ -39,7 +37,6 @@ export function App() {
       <Header />
       <main>
         <Hero />
-        <Impact />
         <ExperienceSection />
         <ProjectsSection />
         <SkillsSection />
@@ -174,7 +171,7 @@ function Hero() {
           </div>
         </div>
       </div>
-      <a className="scroll-hint" href="#impact" aria-label="Scroll to impact">
+      <a className="scroll-hint" href="#experience" aria-label="Scroll to experience">
         <ArrowDownIcon />
       </a>
     </section>
@@ -202,40 +199,12 @@ function SectionHeading({ index, title, kicker }: { index: string; title: string
   );
 }
 
-function Impact() {
-  return (
-    <section id="impact" className="section impact">
-      <div className="container">
-        <Reveal>
-          <SectionHeading index="01" kicker="Principal-level impact" title="Results that scale" />
-        </Reveal>
-        <Reveal>
-          <p className="impact-intro">
-            In September 2025 I was promoted to Principal Software Engineer. A snapshot of recent impact — figures are
-            generalized from internal work.
-          </p>
-        </Reveal>
-        <div className="stat-grid">
-          {highlights.map((h, i) => (
-            <Reveal key={h.label} className={`stat-delay-${i % 3}`}>
-              <div className="glass stat-card">
-                <span className="stat-value">{h.stat}</span>
-                <span className="stat-label">{h.label}</span>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function ExperienceSection() {
   return (
     <section id="experience" className="section">
       <div className="container">
         <Reveal>
-          <SectionHeading index="02" kicker="Where I've worked" title="Experience" />
+          <SectionHeading index="01" kicker="Where I've worked" title="Experience" />
         </Reveal>
         <div className="timeline">
           {experience.map(job => (
@@ -304,7 +273,7 @@ function ProjectsSection() {
     <section id="projects" className="section">
       <div className="container">
         <Reveal>
-          <SectionHeading index="03" kicker="Things I've built" title="Projects" />
+          <SectionHeading index="02" kicker="Things I've built" title="Projects" />
         </Reveal>
         <Reveal>
           <div className="filter-row">
@@ -358,7 +327,7 @@ function SkillsSection() {
     <section id="skills" className="section">
       <div className="container">
         <Reveal>
-          <SectionHeading index="04" kicker="My toolbox" title="Skills & tech" />
+          <SectionHeading index="03" kicker="My toolbox" title="Skills & tech" />
         </Reveal>
         <div className="skills-grid">
           {skillGroups.map(group => (
@@ -386,7 +355,7 @@ function EducationSection() {
     <section id="education" className="section">
       <div className="container">
         <Reveal>
-          <SectionHeading index="05" kicker="Background" title="Education & awards" />
+          <SectionHeading index="04" kicker="Background" title="Education & awards" />
         </Reveal>
         <div className="edu-layout">
           <div className="edu-col">

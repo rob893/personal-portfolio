@@ -22,12 +22,13 @@ export const experience: Experience[] = [
     current: true,
     tags: ['C#', '.NET', 'Azure', 'AI Agents', 'MCP', 'TypeScript'],
     points: [
-      'Designed and built an internal Model Context Protocol (MCP) server that became a primary way engineers and AI agents interact with the platform — scaled from a few hundred to ~9,500 monthly users, serving 6.5M+ requests and ~1M tool calls, on a multi-region deployment with automated failover.',
-      'Led an AI-powered code-transformation system that auto-generates pull requests to fix security and compliance violations across the company — thousands of merged PRs and an estimated 5+ engineering-years saved in a single half.',
-      'Built, on my own initiative, a high-performance cache-backed data-access SDK now load-bearing across multiple services — cutting a key service\u2019s p50 latency roughly in half at 50%+ cache hit rates.',
-      'Built a VS Code extension enabling interactive agentic workflows directly from the editor — 15,000+ installs across partner teams.',
-      'Created an internal, Copilot-CLI-powered developer-tools app that became a daily driver for the team, materially reducing toil and ramp time.',
-      'Consistently the highest code-throughput and PR-review volume on the team; mentor junior engineers, run bi-annual hackathons, and represent the org in engineering-fundamentals and live-site forums.'
+      'Designed and built an internal Model Context Protocol (MCP) server that became a primary way engineers and AI agents interact with the platform — scaled from a few hundred to ~9,500 monthly users, serving millions of requests weekly.',
+      "Authored my organization's official guidelines for building remote MCP servers — distilled from building its first production MCP server — covering secure authentication, security and compliance, multi-region deployment, tooling, and observability. Now the org-wide standard, they let teams ship MCP servers quickly and consistently while being secure and compliant by default when the guidance is followed.",
+      'Built a high-performance 3 tier cache-backed data-access (Kusto and Azure Data Explorer) SDK now load-bearing across multiple services — cutting multiple key services p50 latency roughly in half at 50%+ cache hit rates.',
+      'Built an internal VS Code extension enabling interactive agentic workflows directly from the editor — 15,000+ installs across the company.',
+      "Built (Electron, React, TypeScript) an internal dev-tools app — the favorite thing I've built at Microsoft — that unifies the tools engineers reach for every day into one place: an HTTP/API client, a Kusto query editor, a notes workspace, benchmarking and performance tools, and DevToys-style utilities (formatters, JWT inspectors, and more), with deep integrations into our on-call/incident-management, customer-support, and Azure DevOps systems.",
+      'I gave this dev tools app a built-in JavaScript scripting engine so engineers can automate almost anything — from reacting to system events to trigger Copilot CLI, to running a game of Tetris — and tailored each tool to our team (its API client, for example, auto-syncs request collections across the team via Azure DevOps). Every engineer on the team now uses it daily: ~32 active users ran 774 sessions and triggered 37,000+ tool actions (≈1,175 per user) over the first 3 months of adoption.',
+      'Mentored junior engineers, ran bi-annual hackathons, and represented my team in engineering-fundamentals and live-site forums.'
     ]
   },
   {
@@ -39,9 +40,9 @@ export const experience: Experience[] = [
     points: [
       'Led a team that designed and built a system scanning Microsoft source code for security violations and, using internal AI tools, opening automatic pull requests to fix them — thousands of PRs to date, saving tens of thousands of developer hours.',
       'Built (in C#/.NET and React) a platform that helps Microsoft measure and track governance, compliance, and security requirements for every service across the company.',
-      'Built a syncing system (.NET + Hangfire on Azure) that automatically creates and updates Azure DevOps work items for engineers company-wide, cutting resolution time for synced violations by ~20%.',
+      'Built a syncing system (.NET + Hangfire on Azure) that automatically creates and updates Azure DevOps work items for security and compliance issues for engineers company-wide, cutting resolution time for synced violations by ~20%.',
       'Led the incident response for a major authentication vulnerability across all of our services; authored the postmortem and presented it to senior leadership, driving fixes and doc improvements adopted by other teams.',
-      'Nearly doubled the performance of our deployment-gate system and drove modernization efforts — OneBranch pipelines, managed identity, container-based local dev, and NuGet packaging.',
+      'Designed and built from scratch a deployment-gate system (Azure Functions, TypeScript/Node) that lets any engineer author end-to-end tests which run automatically against our canary regions during CI — blocking bad builds from reaching production. It runs ~200 e2e tests per production deployment, helped sustain our 99.9% uptime SLA, and is confirmed to have prevented multiple production outages.',
       'Earned the Azure Impact Award in both 2023 and 2024.'
     ]
   },
