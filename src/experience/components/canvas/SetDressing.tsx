@@ -28,6 +28,18 @@ const SHIP_QUAT = (() => {
 
 const _pos = new THREE.Vector3();
 
+const MODEL_PATHS = {
+  astronaut: "/models/astronaut.glb",
+  spaceship: "/models/spaceship.glb",
+  station: "/models/iss-lite.glb",
+} as const;
+
+// Begin model downloads during the DOM loading animation, before the Canvas
+// mounts after web fonts are ready.
+useGLTF.preload(MODEL_PATHS.astronaut);
+useGLTF.preload(MODEL_PATHS.spaceship);
+useGLTF.preload(MODEL_PATHS.station);
+
 function prepScene(scene: THREE.Group) {
   scene.traverse((o) => {
     if ((o as THREE.Mesh).isMesh) {
@@ -43,7 +55,7 @@ function prepScene(scene: THREE.Group) {
 function Astronaut() {
   const groupRef = useRef<THREE.Group>(null);
   const inner = useRef<THREE.Group>(null);
-  const { scene } = useGLTF("/models/astronaut.glb");
+  const { scene } = useGLTF(MODEL_PATHS.astronaut);
   const prepped = useMemo(() => prepScene(scene), [scene]);
 
   const glowMat = useMemo(
@@ -84,7 +96,7 @@ function Astronaut() {
 
 function ShipFlyby() {
   const groupRef = useRef<THREE.Group>(null);
-  const { scene } = useGLTF("/models/spaceship.glb");
+  const { scene } = useGLTF(MODEL_PATHS.spaceship);
   const prepped = useMemo(() => prepScene(scene), [scene]);
 
   const { glowMat, trailMat } = useMemo(() => {
@@ -139,7 +151,7 @@ function ShipFlyby() {
 function WorkStation() {
   const groupRef = useRef<THREE.Group>(null);
   const spinRef = useRef<THREE.Group>(null);
-  const { scene: issScene } = useGLTF("/models/iss-lite.glb");
+  const { scene: issScene } = useGLTF(MODEL_PATHS.station);
 
   // Compute the recenter offset without mutating or reparenting the GLTF
   // scene (both break under Strict Mode's double-invoked memos). The

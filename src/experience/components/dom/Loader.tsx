@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useUIStore } from "@/lib/store";
 
 const MIN_SHOW_MS = 1400;
-const FORCE_HIDE_MS = 9000;
+const ABSOLUTE_FALLBACK_MS = 120000;
 
 function RocketGlyph() {
   return (
@@ -53,18 +53,22 @@ export default function Loader() {
   const ready = useUIStore((s) => s.ready);
   const { progress } = useProgress();
   const [minElapsed, setMinElapsed] = useState(false);
-  const [forced, setForced] = useState(false);
+  const [absoluteTimedOut, setAbsoluteTimedOut] = useState(false);
   const [gone, setGone] = useState(false);
 
   useEffect(() => {
     const a = window.setTimeout(() => setMinElapsed(true), MIN_SHOW_MS);
-    const b = window.setTimeout(() => setForced(true), FORCE_HIDE_MS);
+    const b = window.setTimeout(
+      () => setAbsoluteTimedOut(true),
+      ABSOLUTE_FALLBACK_MS
+    );
     return () => {
       window.clearTimeout(a);
       window.clearTimeout(b);
     };
   }, []);
 
+  const forced = absoluteTimedOut;
   const complete = ready || forced;
   const hidden = (ready && minElapsed) || forced;
 

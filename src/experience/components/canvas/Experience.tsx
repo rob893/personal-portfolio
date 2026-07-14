@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment } from "@react-three/drei";
+import { Environment, Preload, useEnvironment } from "@react-three/drei";
 import {
   Bloom,
   ChromaticAberration,
@@ -20,6 +20,12 @@ import ProjectOrbit from "./ProjectOrbit";
 import SetDressing from "./SetDressing";
 import Combat from "./Combat";
 import SunImpact from "./SunImpact";
+
+const ENVIRONMENT_PATH = "/hdri/dikhololo_night_1k.hdr";
+
+// Start the HDRI request as soon as this module loads, while the DOM loader
+// and web fonts are still initializing.
+useEnvironment.preload({ files: ENVIRONMENT_PATH });
 
 /**
  * Primes the GPU behind the loading screen: compiles every shader program
@@ -77,39 +83,6 @@ function SceneReady() {
   }, [gl, scene, camera, setReady]);
 
   return null;
-}
-
-/**
- * Once a deferred subtree has resolved (its models/HDR downloaded), compile
- * its programs so the first time it scrolls into view there's no hitch.
- */
-function DeferredPrecompile() {
-  const gl = useThree((s) => s.gl);
-  const scene = useThree((s) => s.scene);
-  const camera = useThree((s) => s.camera);
-  useEffect(() => {
-    gl.compileAsync(scene, camera).catch(() => {});
-  }, [gl, scene, camera]);
-  return null;
-}
-
-/**
- * The off-hero GLB models (optimized ISS, astronaut, spaceship — none
- * appear in the hero) — mounted only AFTER the hero is on screen and
- * interactive (ready === true), so first paint never waits on them. They
- * stream in the background, then precompile (env already set) so scrolling
- * to the Work/About/Skills sections never hitches.
- */
-function DeferredScene() {
-  const ready = useUIStore((s) => s.ready);
-  if (!ready) return null;
-  return (
-    <Suspense fallback={null}>
-      <SetDressing />
-      <Combat />
-      <DeferredPrecompile />
-    </Suspense>
-  );
 }
 
 /**
@@ -186,10 +159,10 @@ export default function Experience() {
           <ambientLight intensity={0.4} />
           <directionalLight position={[30, 20, 10]} intensity={1.1} color="#dfe8ff" />
 
-          {/* HDRI reflections stay in the hero load — set before materials
-              compile, so no later shader recompile when models stream in. */}
+          {/* Set the HDRI before materials compile so every scene object is
+              primed against the final reflection environment. */}
           <Environment
-            files="/hdri/dikhololo_night_1k.hdr"
+            files={ENVIRONMENT_PATH}
             environmentIntensity={0.5}
           />
 
@@ -200,6 +173,8 @@ export default function Experience() {
           <SkillCards />
           <ProjectOrbit />
           <SunImpact />
+          <SetDressing />
+          <Combat />
 
           <EffectComposer multisampling={4}>
             <Bloom
@@ -214,14 +189,9 @@ export default function Experience() {
           </EffectComposer>
 
           <ImpactPostSurge bloom={bloomRef} chroma={chromaRef} />
+          <Preload all />
           <SceneReady />
         </Suspense>
-
-        {/* Deferred layer: the HDRI (reflections) and the heavy off-hero
-            GLB models (ISS, astronaut, spaceship — none appear in the hero)
-            stream in AFTER first paint, then precompile so scrolling to
-            them never hitches. This is what makes the hero appear fast. */}
-        <DeferredScene />
       </Canvas>
     </div>
   );
